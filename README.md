@@ -1,2 +1,2 @@
-# Quasar Absorption Line Properties based on the AOD method (QALPAOD)
-The respository contains routines for determining quasar absorption line properties based on apparant optical depth (AOD) method.
+# QALStools (Quasar Absorption Line Study tools)
+The respository contains routines for determining survey pathlengths and absorption line properties for the Far-UV spectra in circum/intergalactic medium surveys.
