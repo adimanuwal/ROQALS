@@ -1,2 +1,2 @@
-# QUALSPEC (QUAsar Absorption Line Spectroscopy)
-The respository contains routines for determining survey pathlengths and absorption line properties based on the apparent optical depth (AOD) method in Far-UV spectra of any circum/intergalactic medium survey.
+# TOQALS (Tools for Quasar Absorption Line Surveys)
+The respository contains routines for determining absorption line and galaxy properties relevant for any absorption line study based on the data from the Cosmic Origins Spectrograph and Sloan Digital Sky Survey. 
