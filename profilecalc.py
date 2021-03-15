@@ -1,4 +1,4 @@
-#Absorption Profile Analysis based on Churchill's Thesis
+#Absorption Line Analysis based on the Apparent Optical Depth (AOD) method
 import numpy as np
 import matplotlib.pyplot as plt
 from scipy.constants import c
@@ -65,8 +65,8 @@ def drawline(x):
 
 #For equivalent width calculation
 def wandn(v1,v2):
-     print 'v1:',round(v1,2),'km/s'
-     print 'v2:',round(v2,2),'km/s'
+     print('v1:',int(round(v1)),'km/s')
+     print('v2:',int(round(v2)),'km/s')
      no=0
      for i in range(s):
       if v[i]>=v1 and v[i]<=v2:
@@ -84,29 +84,29 @@ def wandn(v1,v2):
        dl=(wave[j+1]-wave[j])*1e+3
        eqw=eqw+(1-nflux[j])*dl
        unc=np.sqrt(unc**2+(nerr[j]*dl)**2)
-     eqwr=round(eqw/(1+z2),2)
-     uncr=round(abs(unc/(1+z2)),2)
+     eqwr=int(eqw/(1+z2))
+     uncr=int(round(abs(unc/(1+z2))))
      flag=0
      if eqwr<3*uncr:
       flag=1
-      print 'Non-detection!'
-      print 'Determining 3 sigma upper limit of W ...'
+      print('Non-detection!')
+      print('Determining 3 sigma upper limit of W ...')
       uncr1=uncr
       eqw=3*unc
       eqwr=3*uncr
       unc=0
       uncr=0
-     print 'Observed Equivalent Width (mAngs):',round(eqw,2),' +- ',round(abs(unc),2)
-     print 'Rest Equivalent Width (mAngs):',eqwr,' +- ',uncr
-     datf.write(str(eqwr)+' +- '+str(uncr)+'   ')
+     print('Observed Equivalent Width (mAngs):',int(eqw),' +- ',int(round(unc)))
+     print('Rest Equivalent Width (mAngs):',eqwr,' +- ',uncr)
+     datf.write(str(eqwr)+' +- '+str(uncr)+'    ')
      #N calculation
      ind=0
      ln=0
      ld=0
      punc=0
      if flag==1:
-      print 'Determining upper limit of N using the COG ...' 
-      acd=3*uncr1/((twav/(1+z2))**2*0.095220)*10**(20.053-3) #by Jill Bechtold 
+      print('Determining upper limit of N using the COG ...') 
+      acd=3*uncr1/((twav/(1+z2))**2*fl)*10**(20.053-3) #by Jill Bechtold 
       lunc=0
      else:
       acd=0
@@ -121,14 +121,14 @@ def wandn(v1,v2):
         acd=acd+ad*dv
         punc=np.sqrt(punc**2+(3.768e+14*(fl*twav/(1+z2))**(-1)*(-nerr[j]*dv/nflux[j]))**2)
       lunc=punc/(np.log(10)*acd)#base10
-     print 'Apparant Column Density (N(/sq.cm)):',sci(acd),' +- ',sci(abs(punc))
-     print 'Apparant Column Density (log(N)(/sq.cm)):',str(round(np.log10(abs(acd)),2)),' +- ',str(round(abs(lunc),2))
-     datf.write(str(sci(acd))+' +- '+str(sci(abs(punc)))+'  '+str(round(np.log10(abs(acd)),2))+' +- '+str(round(abs(lunc),2))+'    ')
+     print('Apparant Column Density (N(/sq.cm)):',sci(acd),' +- ',sci(abs(punc)))
+     print('Apparant Column Density (log(N)(/sq.cm)):',str(round(np.log10(abs(acd)),2)),' +- ',str(round(abs(lunc),2)))
+     datf.write(str(sci(acd))+' +- '+str(sci(abs(punc)))+'    '+str(round(np.log10(abs(acd)),2))+' +- '+str(round(abs(lunc),2))+'     ')
      fill_between_steps(m,n,1,color='red')
 #velocity width
 def kmatics(v1,v2):
-     #print 'v1:',v1,'km/s'
-     #print 'v2:',v2,'km/s'
+     #print('v1:',v1,'km/s'
+     #print('v2:',v2,'km/s'
      intau=0
      meanv=0
      omvs=0
@@ -163,7 +163,7 @@ def kmatics(v1,v2):
         omvs=omvs+(tau*((v[j]-meanv)**2)*dv)
         omv1err=np.sqrt(omv1err**2+((2*(v[j]-meanv)*mverr*tau+(v[j]-meanv)**2*nerr[j]/nflux[j])*dv)**2)
      if omvs<0:
-      print 'Negative value of omvs!' 
+      print('Negative value of omvs!') 
      omv=np.sqrt(omvs/intau)
      omverr=abs((omv1err/intau-interr*omvs/intau**2)/(2*omv))
      #for dv90
@@ -183,17 +183,17 @@ def kmatics(v1,v2):
         v2n=v[j]
     
      dv90=v2n-v1n
-     print 'Integrated tau:',round(intau,2),'+-',round(interr,2)
-     print 'Mean v(km/s):',round(meanv,2),'+-',round(mverr,2)
-     print 'Omega v(km/s):',round(omv,2),'+-',round(omverr,2)
-     print 'dv90(km/s):',round(dv90,2)
+     print('Integrated tau:',round(intau,2),'+-',round(interr,2))
+     print('Mean v(km/s):',round(meanv,2),'+-',round(mverr,2))
+     print('Omega v(km/s):',round(omv,2),'+-',round(omverr,2))
+     print('dv90(km/s):',round(dv90,2))
      velar=np.zeros(2)
-     velar[0]=round(v1,2)
-     velar[1]=round(v2,2)
+     velar[0]=int(round(v1))
+     velar[1]=int(round(v2))
      datf.write('['+str(velar[0])+','+str(velar[1])+']'+'   ')
      datf.write(str(round(intau,2))+' +- '+str(round(interr,2))+'  ')
      datf.write(str(round(meanv,2))+' +- '+str(round(mverr,2))+'   ')
-     datf.write(str(round(omv,2))+' +- '+str(round(omverr,2))+'  ')
+     datf.write(str(round(omv,2))+' +- '+str(round(omverr,2))+'   ')
      datf.write(str(round(dv90,2))+'\n')
 #For interfacing
 def onclick(event):
@@ -203,7 +203,6 @@ def onclick(event):
     ind = event.ind
     x=float(xdata[ind])
     y=float(ydata[ind])
-    print 'Velocity:',x,'km/s,','Normalized Flux:',y
     global v1
     global v2
     global c
@@ -232,8 +231,8 @@ while new=='y':
  fsp=fname.split('_')
  datf=open(fsp[0]+'_ltable.dat','w')
  z2=float(input('z(absorber):'))
- print 'Observe the system plot.'
- datf.write('Line\t    W(mAngs)\t     N(/sq.cm)\t\t   log(N)(/sq.cm)   [-v, +v]\t    int.tau\t    meanv(km/s)    omv(km/s)\t  dv90(km/s)\n')
+ print('Observe the system plot.')
+ datf.write('Line\t   W(mAngs)    N(/sq.cm)\t       log(N)(/sq.cm)    [-v, +v]       int.tau\t       meanv(km/s)     omv(km/s)       dv90(km/s)\n')
  f=open(fname)
  lines=f.readlines()
  s=len(lines)
@@ -259,9 +258,8 @@ while new=='y':
     nflux[ind]=nerr[ind]
  ch='y'
  while ch=='y':
-  fig = plt.figure(figsize=(15,10))
-  ax = fig.add_subplot(111)
-  ax.set_aspect(240)
+  fig = plt.figure(figsize=(10,5))
+  pos  = [0.08, 0.13, 0.9, 0.85] ; ax  = fig.add_axes(pos)
   trans=input('Transition:')
   datf.write(trans+'   ')
   const=trans.split()
@@ -273,25 +271,22 @@ while new=='y':
    r=rows[i].split()
    r2=r[3].split('.')
    if e0==r[0] and e1==r[1] and e2==r2[0]:
-    print 'Transition found in the list.'
+    print('Transition found in the list.')
     twav=float(r[3])*(1+z2)
     fl=float(r[4])
     check=1
   if check==0:
-   print 'Transition is not in the list!'
+   print('Transition is not in the list!')
   if twav<min(wave) or twav>max(wave):
-   print 'The required observed wavelength is not covered in the given file !'
+   print('The required observed wavelength is not covered in the given file !')
   if twav>=min(wave) and twav<=max(wave) and check==1:
-      #finding the exact absorption wavelength
-      for i in range(s):
-       if abs(wave[i]-twav)<3e-2:
-        linw=wave[i]/(1+z2)
-      print 'Rest transition wavelength(Angs):',linw
+      linw=twav/(1+z2)
+      print('Rest transition wavelength(Angs):',linw)
       for m in range(s):
        z1=(wave[m]-linw)/linw
        v[m]=(cval*1e-3)*((1+z1)**2-(1+z2)**2)/((1+z1)**2+(1+z2)**2)
-      ax.text(-435,0.2,trans,color='red',size=20)
-      ax.text(350,0.2,round(linw*(1+z2),4),color='red',size=20)
+      ax.text(-235,0.2,trans,color='red',size=20)
+      ax.text(150,0.2,round(linw*(1+z2),4),color='red',size=20)
       line, = ax.step(v,nflux,'black',picker=5)
       ax.step(v,nerr,'blue')
       #plt.tick_params(axis='y',which='major',pad=15)
@@ -301,7 +296,7 @@ while new=='y':
       verty=np.linspace(0,1.5,10)
       vertx=np.zeros(10)
       plt.plot(vertx,verty,'-.',color='black')
-      plt.xlim(-500,500)
+      plt.xlim(-300,300)
       plt.ylim(0,1.5)
       plt.xlabel('Velocity (km/s)',size=18)
       plt.ylabel('Normalized Flux',size=18)
@@ -313,8 +308,7 @@ while new=='y':
       click=input('Velocity limits by clicking on the figure?(y/n):')
       if click=='y':
        c=0#flag
-       print 'Plotting',trans,'..'
-       ax.set_title('Click on the Limits', size=20)
+       print('Plotting',trans,'..')
        fig.canvas.mpl_connect('pick_event', onclick)
        plt.show()
       if click=='n':
@@ -327,6 +321,6 @@ while new=='y':
        kmatics(v1,v2)
        plt.show()
   ch=input('Another transition in the same file?(y/n):')
- print 'Output file: '+fsp[0]+'_ltable.dat'
+ print('Output file: '+fsp[0]+'_ltable.dat')
  new=input('New file?(y/n):')
  
