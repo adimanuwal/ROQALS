@@ -5,7 +5,6 @@ import matplotlib.pyplot as plt
 from COG import curve_of_growth
 from scipy.constants import c
 from scipy import stats
-from matplotlib.ticker import MultipleLocator, FormatStrFormatter
 #fh=0.416400
 #lh=1215.6701
 #f = open('cog_bpar13.out','r')
