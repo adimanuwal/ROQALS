@@ -1,3 +1,4 @@
+#For determining line-of-sight velocity separation, k corrections, L/L* and virial radii of galaxies from SDSS spectroscopic database
 from scipy.constants import c
 from nedcalc1 import *#Ned Wright's Cosmology Calculator
 from numpy import *
