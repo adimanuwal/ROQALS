@@ -1,3 +1,4 @@
+#Ned Wright's Cosmology Calculator (adopted from http://www.astro.ucla.edu/~wright/CC.python)
 from math import *
 from numpy import *
 
