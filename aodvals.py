@@ -227,7 +227,7 @@ rows=f.readlines()
 n=len(rows)
 new='y'
 while new=='y':
- fname=input('Spectrum(continuum fitted):')
+ fname=input('Spectrum(continuum fitted):')#'Enter as a string e.g. 'PG1424+240_cf.dat'
  fsp=fname.split('_')
  datf=open(fsp[0]+'_ltable.dat','w')
  z2=float(input('z(absorber):'))
@@ -260,7 +260,7 @@ while new=='y':
  while ch=='y':
   fig = plt.figure(figsize=(10,5))
   pos  = [0.08, 0.13, 0.9, 0.85] ; ax  = fig.add_axes(pos)
-  trans=input('Transition:')
+  trans=input('Transition:')#Enter as a string e.g. 'C IV 1548'
   datf.write(trans+'   ')
   const=trans.split()
   e0=const[0]
