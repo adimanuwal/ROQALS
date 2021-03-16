@@ -1,105 +1,89 @@
-from nedcalc1 import *
-import os
+from scipy.constants import c
+from nedcalc1 import *#Ned Wright's Cosmology Calculator
 from numpy import *
-from calc_kcor import *
-h=0.696
-mgs=-19.39+5*log10(h)
+from calc_kcor import *#k corrections
 
-f=open('impvalues','r')
+sqlout = input('Enter the sql query output:')
+red = float(input('Enter the reference redshift:'))#redshift about which the velocity separations are determined
+
+h=0.696#Hubble parameter
+mgs=-19.39+5*log10(h)#Mg* for z<0.16 based on Blanton et al. 2003
+
+def relv(z1,z2):#relative los velocity separation
+ dv=(c*1e-3)*((1+z2)**2-(1+z1)**2)/((1+z2)**2+(1+z1)**2)
+ return(dv) 
+
+f=open(sqlout,'r')
 lines=f.readlines()
 f.close()
-size=len(lines)
-zimp=zeros(size-1)
-ngal=zeros(size-1)
-for i in range(1,size):
- line = lines[i].split('\n')[0]
- zimp[i-1] = float(line.split(',')[0])
- ngal[i-1] = float(line.split(',')[4])
- 
-f1=open('/home/adiman/Desktop/absorbers/folders','r')
-folders=f1.readlines()
-s1=len(folders)
-f1.close()
-
-for i in range(s1):
- system=folders[i].split('\n')[0]
- red = float(system.split('_')[1])
- sel = where(zimp==red)[0]
- if len(sel)!=0:
-  if ngal[sel]>0:
-   print('\n'+system)
-   f=open('/home/adiman/Desktop/absorbers/'+system+'/galaxies/2mpc_1000kms_sorted.csv','r')
-   lines1 = f.readlines()
-   f.close()
-   ng = 0
-   f=open('/home/adiman/Desktop/absorbers/'+system+'/galaxies/rhodv','w')
-   f.write('rho  rho/rvir dv  rho3d  rho3d/rvir')
-   for j in range(len(lines1)):
-    line = lines1[j].split('\n')[0].split()
-    zgal = line[2]
-    rho=float(line[-3])
-    if rho<2000:
-     if zgal!='*******':
-      z = float(zgal)
-      dv=abs(float(line[4]))
-      if z>0:
-       dl=cosmcalc(100*h,0.286,0.714,z)[1]
-       color=float(line[-2])-float(line[-1])
-       mpk=float(line[-2])+5-5*log10(1e+6*dl)
-       k = calc_kcor('g',z,'g - r',color)
-       mg = mpk-k
-       lratio=10**(0.4*(mgs-mg))
-       if lratio>0.2:
-        rvirial=250*(lratio)**(0.2) #Prochaska et al.
-        dl1=cosmcalc(100*h,0.286,0.714,red)[1]
-        dlos=abs(dl1-dl)*1e+3
-        rho3d = sqrt(dlos**2+rho**2)
-        ratio=rho/rvirial
-        ratio1=rho3d/rvirial
-        f.write('\n'+str(float(round(rho,2)))+'  '+str(round(ratio,2))+'      '+str(float(round(dv,2)))+'  '+str(float(round(rho3d,2)))+'   '+str(round(ratio1,2)))    
-   f.close()
-
-f=open('impvalues1','w')
-f.write('z,imp(kpc),ngals,rhobyrvir(min),|dv|')
-
-sys = array([],dtype=str)
-reds = array([])
-for i in range(s1):
- system=folders[i].split('\n')[0]
- sys=append(sys,system)
- reds=append(reds,float(system.split('_')[1]))
-
-print(reds)
-for i in range(1,size):
- line = lines[i].split('\n')[0]
- z = float(line.split(',')[0])
- ngal = float(line.split(',')[4])
- print(z)
- if ngal==0:
-  f.write('\n'+line)
- else:
-  system=sys[reds==z]
-  f1=open('/home/adiman/Desktop/absorbers/'+str(system[0])+'/galaxies/rhodv','r')
-  lines1 = f1.readlines()
-  ngal=len(lines1)-1
-  if ngal!=0:
-   rbyrvir=zeros(ngal)
-   r=zeros(ngal)
-   dvs=zeros(ngal)
-   for j in range(1,len(lines1)):
-    line = lines1[j].split('\n')[0].split()
-    r[j-1]=float(line[0])
-    rbyrvir[j-1]=float(line[1])
-    dvs[j-1]=float(line[2])
-
-   sel = where(rbyrvir==min(rbyrvir))[0]
-   rbyrvirmin = min(rbyrvir) 
-   dvs = dvs[sel] 
-   dvmin = min(dvs)
-   r = r[sel]
-   rmin = float(r[dvs==dvmin])
-   f.write('\n'+str(z)+','+str(rmin)+','+str(ngal)+','+str(rbyrvirmin)+','+str(dvmin))
-  else:
-   f.write('\n'+str(z)+',0,0,0,0') 
+if len(lines)>2:
+  f=open('sorted.csv','w')#file with galaxies sorted by impact parameter
+  ra=array([])#RA
+  dec=array([])#Dec
+  z=array([])#spectroscopic z
+  zerr=array([])#error in spec z
+  dv=array([])#los velocity separation
+  dverr=array([])#error in dv
+  angimp=array([])#angular separation in '
+  linimp=array([])#linear separation in kpc
+  g=array([])#g-band apparant magnitude
+  r=array([])#r-band apparent magnitude
+  for i in range(2,len(lines)):
+   line=lines[i].split('\n')[0].split(',')
+   ra=append(ra,round(float(line[1]),5))
+   dec=append(dec,round(float(line[2]),5))
+   z=append(z,round(float(line[5]),5))
+   zerr=append(zerr,round(float(line[6]),5))
+   dv=append(dv,round(relv(float(line[5]),red),4))
+   num=(1+z[-1])**2-(1+red)**2
+   den=(1+z[-1])**2+(1+red)**2
+   numer=2*zerr[-1]
+   dener=numer 
+   dverr=append(dverr,round(abs(dv[-1]*sqrt((numer/num)**2+(dener/den)**2)),4))
+   angimp=append(angimp,round(float(line[7]),4))
+   imp=angimp[-1]*cosmcalc(100*h,0.286,0.714,red)[0]*60
+   linimp=append(linimp,round(imp,4))
+   g=append(g,round(float(line[10]),4))
+   r=append(r,round(float(line[12]),4))
   
+  sortind = argsort(linimp)
+  ra=ra[sortind]
+  dec=dec[sortind]
+  z=z[sortind]
+  zerr=zerr[sortind]
+  dv=dv[sortind]
+  dverr=dverr[sortind]
+  angimp=angimp[sortind]
+  linimp=linimp[sortind]
+  g=g[sortind]
+  r=r[sortind]
+  for i in range(len(ra)):
+   if i!=len(ra)-1:
+    f.write(str(ra[i])+' '+str(dec[i])+' '+str(z[i])+' '+str(zerr[i])+' '+str(dv[i])+' '+str(dverr[i])+' '+str(angimp[i])+' '+str(linimp[i])+' '+str(g[i])+' '+str(r[i])+'\n')
+   else: 
+    f.write(str(ra[i])+' '+str(dec[i])+' '+str(z[i])+' '+str(zerr[i])+' '+str(dv[i])+' '+str(dverr[i])+' '+str(angimp[i])+' '+str(linimp[i])+' '+str(g[i])+' '+str(r[i]))
+  f.close()
+  
+  f=open('sorted.csv','r')
+  lines1 = f.readlines()
+  f.close()
+  f=open('rhodv','w')
+  f.write('rho  rho/rvir dv')
+  for j in range(len(lines1)):
+     line = lines1[j].split('\n')[0].split()
+     z = float(line[2])
+     rho=float(line[-3])
+     if rho<2000 and z>0:
+       dv=abs(float(line[4]))
+       dl=cosmcalc(100*h,0.286,0.714,z)[1]#luminosity distance
+       color=float(line[-2])-float(line[-1])#(g-r) color
+       mpk=float(line[-2])+5-5*log10(1e+6*dl)#Mg+k
+       k = calc_kcor('g',z,'g - r',color)#k
+       mg = mpk-k#Mg
+       lratio=10**(0.4*(mgs-mg))#L/L*
+       if lratio>0.2:
+        rvirial=250*(lratio)**(0.2) #R_vir (Prochaska et al. 2011)
+        ratio=rho/rvirial
+        f.write('\n'+str(float(round(rho,2)))+'  '+str(round(ratio,2))+'      '+str(float(round(dv,2))))    
+   f.close()
  
