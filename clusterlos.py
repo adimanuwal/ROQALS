@@ -1,3 +1,4 @@
+#Finding COS sightlines that pass within 2 Mpc in projected separation wrt to BCGs in Abell Clusters 
 from nedcalc1 import *
 from numpy import *
 f0 = open('modspec','r')
