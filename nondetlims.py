@@ -1,3 +1,4 @@
+#For determining C IV 1548 upper limits along targeted sightlines in the COS Legacy Archive
 from nedcalc1 import *
 import os
 from numpy import *
