@@ -218,10 +218,10 @@ def onclick(event):
      kmatics(v1,v2)
     fig.canvas.draw()
 
-path='/home/adiman/projectdata/COS.Legacy.Data/BIN.DATA/MODIFIED/contfit/'
+path='/home/adiman/projectdata/COS.Legacy.Data/BIN.DATA/MODIFIED/contfit/'#path to the continuum fitted files
 os.chdir(path)
 #atlist=input('Enter the ion list file:')
-atlist='modatoms.dat'
+atlist='modatoms.dat'#files with the atomic transition data
 f=open(atlist,'r')
 rows=f.readlines()
 n=len(rows)
