@@ -1,4 +1,4 @@
-#total pathlength and grating stats
+#Total redshift pathlength for C IV 1548
 import os
 import numpy as np
 import matplotlib.pyplot as plt
