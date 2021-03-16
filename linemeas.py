@@ -1,4 +1,7 @@
-#Absorption Line Measurements based on the Apparent Optical Depth (AOD) method (the code saves all the measurements in a .dat file as a table).
+#Absorption Line Measurements based on the Apparent Optical Depth (AOD) method
+#Enter responses to the prompts within quotes if you are using python2. 
+#The code saves all the measurements as a table in a .dat file whose name is derived from the continuum fitted file's name (assumed to be ...._cf.dat).
+
 import numpy as np
 import matplotlib.pyplot as plt
 from scipy.constants import c
@@ -227,7 +230,7 @@ rows=f.readlines()
 n=len(rows)
 new='y'
 while new=='y':
- fname=input('Spectrum(continuum fitted):')#'Enter as a string e.g. 'PG1424+240_cf.dat'
+ fname=input('Spectrum(continuum fitted):')
  fsp=fname.split('_')
  datf=open(fsp[0]+'_ltable.dat','w')
  z2=float(input('z(absorber):'))
@@ -260,7 +263,7 @@ while new=='y':
  while ch=='y':
   fig = plt.figure(figsize=(10,5))
   pos  = [0.08, 0.13, 0.9, 0.85] ; ax  = fig.add_axes(pos)
-  trans=input('Transition:')#Enter as a string e.g. 'C IV 1548'
+  trans=input('Transition:')
   datf.write(trans+'   ')
   const=trans.split()
   e0=const[0]
@@ -305,7 +308,7 @@ while new=='y':
       #line, = ax.plot(np.random.rand(100), 'o', picker=5)  # 5 points tolerance
       v1=-1
       v2=-1
-      click=input('Velocity limits by clicking on the figure?(y/n):')#'y' or 'n'
+      click=input('Velocity limits by clicking on the figure?(y/n):')
       if click=='y':
        c=0#flag
        print('Plotting',trans,'..')
@@ -320,7 +323,7 @@ while new=='y':
        wandn(v1,v2)
        kmatics(v1,v2)
        plt.show()
-  ch=input('Another transition in the same file?(y/n):')#'y' or 'n'
+  ch=input('Another transition in the same file?(y/n):')
  print('Output file: '+fsp[0]+'_ltable.dat')
- new=input('New file?(y/n):')#'y' or 'n'
+ new=input('New file?(y/n):')
  
