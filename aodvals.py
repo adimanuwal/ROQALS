@@ -1,4 +1,4 @@
-#Absorption Line Analysis based on the Apparent Optical Depth (AOD) method
+#Absorption Line Measurements based on the Apparent Optical Depth (AOD) method (the code saves all the measurements in a .dat file as a table).
 import numpy as np
 import matplotlib.pyplot as plt
 from scipy.constants import c
