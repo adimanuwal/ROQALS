@@ -1,3 +1,4 @@
+#K-corrections based on Chilingarian et al. 2010 (adopted from http://kcor.sai.msu.ru/getthecode/)
 def calc_kcor(filter_name, redshift, colour_name, colour_value):
     """
     K-corrections calculator in Python. See http://kcor.sai.msu.ru for the 
