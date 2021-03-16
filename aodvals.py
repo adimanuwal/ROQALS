@@ -305,7 +305,7 @@ while new=='y':
       #line, = ax.plot(np.random.rand(100), 'o', picker=5)  # 5 points tolerance
       v1=-1
       v2=-1
-      click=input('Velocity limits by clicking on the figure?(y/n):')
+      click=input('Velocity limits by clicking on the figure?(y/n):')#'y' or 'n'
       if click=='y':
        c=0#flag
        print('Plotting',trans,'..')
@@ -320,7 +320,7 @@ while new=='y':
        wandn(v1,v2)
        kmatics(v1,v2)
        plt.show()
-  ch=input('Another transition in the same file?(y/n):')
+  ch=input('Another transition in the same file?(y/n):')#'y' or 'n'
  print('Output file: '+fsp[0]+'_ltable.dat')
- new=input('New file?(y/n):')
+ new=input('New file?(y/n):')#'y' or 'n'
  
