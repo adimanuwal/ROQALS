@@ -30,7 +30,7 @@ angimp=array([])#angular separation in '
 linimp=array([])#linear separation in kpc
 g=array([])#g-band apparant magnitude
 r=array([])#r-band apparent magnitude
-for i in range(2,len(lines)):#the galaxy data in SDSS SQL query outputs begins after first two rows 
+for i in range(2,len(lines)):#the galaxy data in a SDSS SQL query output begins after first two rows 
    line=lines[i].split('\n')[0].split(',')
    ra=append(ra,round(float(line[1]),5))
    dec=append(dec,round(float(line[2]),5))
