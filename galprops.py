@@ -14,6 +14,7 @@ def relv(z1,z2):#relative los velocity separation
  dv=(c*1e-3)*((1+z2)**2-(1+z1)**2)/((1+z2)**2+(1+z1)**2)
  return(dv) 
 
+#Sorting the galaxies acoording to their impact parameter
 f=open(sqlout,'r')
 lines=f.readlines()
 f.close()
@@ -65,6 +66,7 @@ if len(lines)>2:
     f.write(str(ra[i])+' '+str(dec[i])+' '+str(z[i])+' '+str(zerr[i])+' '+str(dv[i])+' '+str(dverr[i])+' '+str(angimp[i])+' '+str(linimp[i])+' '+str(g[i])+' '+str(r[i]))
   f.close()
   
+  #Saving the impact parameter, normalized impact parameter and velocity separation for galaxies above a luminosity cut
   f=open('sorted.csv','r')
   lines1 = f.readlines()
   f.close()
