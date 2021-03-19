@@ -10,7 +10,7 @@ red = float(input('Enter the reference redshift:'))#redshift about which the vel
 h=0.696#Hubble parameter
 mgs=-19.39+5*log10(h)#Mg* for z<0.16 based on Blanton et al. 2003
 
-def relv(z1,z2):#relative los velocity separation
+def relv(z1,z2):#relative los velocity separation in km/s
  dv=(c*1e-3)*((1+z2)**2-(1+z1)**2)/((1+z2)**2+(1+z1)**2)
  return(dv) 
 
