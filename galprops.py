@@ -20,17 +20,18 @@ lines=f.readlines()
 f.close()
 
 f=open('sorted.csv','w')#file with galaxies sorted by impact parameter
-ra=array([])#RA
-dec=array([])#Dec
-z=array([])#spectroscopic z
-zerr=array([])#error in spec z
-dv=array([])#los velocity separation
-dverr=array([])#error in dv
-angimp=array([])#angular separation in '
-linimp=array([])#linear separation in kpc
-g=array([])#g-band apparant magnitude
-r=array([])#r-band apparent magnitude
-for i in range(2,len(lines)):#the galaxy data in a SDSS SQL query output begins after first two rows 
+if len(lines)>2:#the galaxy data in a SDSS SQL query output begins after first two rows 
+ ra=array([])#RA
+ dec=array([])#Dec
+ z=array([])#spectroscopic z
+ zerr=array([])#error in spec z
+ dv=array([])#los velocity separation
+ dverr=array([])#error in dv
+ angimp=array([])#angular separation in '
+ linimp=array([])#linear separation in kpc
+ g=array([])#g-band apparant magnitude
+ r=array([])#r-band apparent magnitude
+ for i in range(2,len(lines)):
    line=lines[i].split('\n')[0].split(',')
    ra=append(ra,round(float(line[1]),5))
    dec=append(dec,round(float(line[2]),5))
@@ -48,19 +49,19 @@ for i in range(2,len(lines)):#the galaxy data in a SDSS SQL query output begins 
    g=append(g,round(float(line[10]),4))
    r=append(r,round(float(line[12]),4))
 
-if len(ra)>0:  
-  sortind = argsort(linimp)
-  ra=ra[sortind]
-  dec=dec[sortind]
-  z=z[sortind]
-  zerr=zerr[sortind]
-  dv=dv[sortind]
-  dverr=dverr[sortind]
-  angimp=angimp[sortind]
-  linimp=linimp[sortind]
-  g=g[sortind]
-  r=r[sortind]
-  for i in range(len(ra)):
+ #sorting
+ sortind = argsort(linimp)
+ ra=ra[sortind]
+ dec=dec[sortind]
+ z=z[sortind]
+ zerr=zerr[sortind]
+ dv=dv[sortind]
+ dverr=dverr[sortind]
+ angimp=angimp[sortind]
+ linimp=linimp[sortind]
+ g=g[sortind]
+ r=r[sortind]
+ for i in range(len(ra)):
    if i!=len(ra)-1:
     f.write(str(ra[i])+' '+str(dec[i])+' '+str(z[i])+' '+str(zerr[i])+' '+str(dv[i])+' '+str(dverr[i])+' '+str(angimp[i])+' '+str(linimp[i])+' '+str(g[i])+' '+str(r[i])+'\n')
    else: 
