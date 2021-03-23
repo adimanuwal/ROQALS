@@ -85,7 +85,7 @@ for j in range(len(lines1)):
      color=float(line[-2])-float(line[-1])#(g-r) color
      mpk=float(line[-1])+5-5*log10(1e+6*dl)#Mr+k
      k = calc_kcor('r',z,'g - r',color)#k
-     mr = mpk-k#Mg
+     mr = mpk-k#k-corrected Mr
      lratio=10**(0.4*(mrs-mr))#L/L*
      if lratio>lcut:
        rvirial=250*(lratio)**(0.2) #R_vir (Prochaska et al. 2011)
