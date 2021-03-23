@@ -8,7 +8,7 @@ sqlout = input('Enter the sql query output:')
 red = float(input('Enter the reference redshift:'))#redshift about which the velocity separations are determined
 
 h=0.696#Hubble parameter
-mgs=-19.39+5*log10(h)#Mg* for z<0.16 based on Blanton et al. 2003
+mrs=-20.44+5*log10(h)#Mr* for z<0.16 based on Blanton et al. 2003
 
 def relv(z1,z2):#relative los velocity separation in km/s
  dv=(c*1e-3)*((1+z2)**2-(1+z1)**2)/((1+z2)**2+(1+z1)**2)
@@ -67,7 +67,8 @@ if len(lines)>2:#the galaxy data in a SDSS SQL query output begins after first t
    else: 
     f.write(str(ra[i])+' '+str(dec[i])+' '+str(z[i])+' '+str(zerr[i])+' '+str(dv[i])+' '+str(dverr[i])+' '+str(angimp[i])+' '+str(linimp[i])+' '+str(g[i])+' '+str(r[i]))
 f.close()
-  
+
+lcut=0.01#Luminosity threshold for galaxies
 #Saving the impact parameter, normalized impact parameter and velocity separation for galaxies above a luminosity cut
 f=open('sorted.csv','r')
 lines1 = f.readlines()
@@ -78,15 +79,15 @@ for j in range(len(lines1)):
    line = lines1[j].split('\n')[0].split()
    z = float(line[2])
    rho=float(line[-3])
-   if rho<2000 and z>0:
-     dv=abs(float(line[4]))
+   dv=abs(float(line[4]))
+   if rho<1500 and dv < 1000 and z>0:#impact parameter < 1.5 Mpc and line-of-sight velocity separation < 1000 km/s
      dl=cosmcalc(100*h,0.286,0.714,z)[1]#luminosity distance
      color=float(line[-2])-float(line[-1])#(g-r) color
-     mpk=float(line[-2])+5-5*log10(1e+6*dl)#Mg+k
-     k = calc_kcor('g',z,'g - r',color)#k
-     mg = mpk-k#Mg
-     lratio=10**(0.4*(mgs-mg))#L/L*
-     if lratio>0.2:
+     mpk=float(line[-1])+5-5*log10(1e+6*dl)#Mr+k
+     k = calc_kcor('r',z,'g - r',color)#k
+     mr = mpk-k#Mg
+     lratio=10**(0.4*(mrs-mr))#L/L*
+     if lratio>lcut:
        rvirial=250*(lratio)**(0.2) #R_vir (Prochaska et al. 2011)
        ratio=rho/rvirial
        f.write('\n'+str(float(round(rho,2)))+'  '+str(round(ratio,2))+'      '+str(float(round(dv,2))))    
